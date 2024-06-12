@@ -18,22 +18,6 @@
 
 package main
 
-import (
-	"log"
-	"os"
-)
-
-func main() {
-	config := &Config{
-		M3UPlaylistUrl: os.Getenv("PLAYLIST_URL"),
-	}
-
-	server, err := NewServer(config)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	if e := server.Serve(); e != nil {
-		log.Fatal(e)
-	}
+type Config struct {
+	M3UPlaylistUrl string
 }

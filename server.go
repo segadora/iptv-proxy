@@ -16,69 +16,51 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package server
+package main
 
 import (
 	"bytes"
 	"fmt"
+	"github.com/gin-contrib/cors"
+	"github.com/gin-gonic/gin"
+	"github.com/jamesnetherton/m3u"
 	"log"
 	"net/url"
 	"os"
 	"path"
-	"path/filepath"
-	"strings"
-
-	"github.com/gin-contrib/cors"
-	"github.com/jamesnetherton/m3u"
-	"github.com/pierre-emmanuelJ/iptv-proxy/pkg/config"
-	uuid "github.com/satori/go.uuid"
-
-	"github.com/gin-gonic/gin"
 )
 
-var defaultProxyfiedM3UPath = filepath.Join(os.TempDir(), uuid.NewV4().String()+".iptv-proxy.m3u")
-var endpointAntiColision = strings.Split(uuid.NewV4().String(), "-")[0]
+// Server represent the server configuration
+type Server struct {
+	*Config
 
-// Config represent the server configuration
-type Config struct {
-	*config.ProxyConfig
+	proxyPlaylistFile *os.File
 
 	// M3U service part
 	playlist *m3u.Playlist
 	// this variable is set only for m3u proxy endpoints
 	track *m3u.Track
-	// path to the proxyfied m3u file
-	proxyfiedM3UPath string
-
-	endpointAntiColision string
 }
 
 // NewServer initialize a new server configuration
-func NewServer(config *config.ProxyConfig) (*Config, error) {
+func NewServer(config *Config) (*Server, error) {
 	var p m3u.Playlist
-	if config.RemoteURL.String() != "" {
-		var err error
-		p, err = m3u.Parse(config.RemoteURL.String())
-		if err != nil {
-			return nil, err
-		}
+	var err error
+	p, err = m3u.Parse(config.M3UPlaylistUrl)
+	if err != nil {
+		return nil, err
 	}
 
-        if trimmedCustomId := strings.Trim(config.CustomId, "/"); trimmedCustomId != "" {
-                endpointAntiColision = trimmedCustomId
-        }
-
-	return &Config{
+	return &Server{
 		config,
+		nil,
 		&p,
 		nil,
-		defaultProxyfiedM3UPath,
-		endpointAntiColision,
 	}, nil
 }
 
 // Serve the iptv-proxy api
-func (c *Config) Serve() error {
+func (c *Server) Serve() error {
 	if err := c.playlistInitialization(); err != nil {
 		return err
 	}
@@ -88,25 +70,27 @@ func (c *Config) Serve() error {
 	group := router.Group("/")
 	c.routes(group)
 
-	return router.Run(fmt.Sprintf(":%d", c.HostConfig.Port))
+	return router.Run(fmt.Sprintf(":%d", 1323))
 }
 
-func (c *Config) playlistInitialization() error {
+func (c *Server) playlistInitialization() error {
 	if len(c.playlist.Tracks) == 0 {
 		return nil
 	}
 
-	f, err := os.Create(c.proxyfiedM3UPath)
+	f, err := os.CreateTemp("", "playlist")
 	if err != nil {
 		return err
 	}
 	defer f.Close()
 
-	return c.marshallInto(f, false)
+	c.proxyPlaylistFile = f
+
+	return c.marshallInto(f)
 }
 
 // MarshallInto a *bufio.Writer a Playlist.
-func (c *Config) marshallInto(into *os.File, xtream bool) error {
+func (c *Server) marshallInto(into *os.File) error {
 	filteredTrack := make([]m3u.Track, 0, len(c.playlist.Tracks))
 
 	ret := 0
@@ -124,7 +108,7 @@ func (c *Config) marshallInto(into *os.File, xtream bool) error {
 			buffer.WriteString(fmt.Sprintf("%s=%q ", track.Tags[i].Name, track.Tags[i].Value)) // nolint: errcheck
 		}
 
-		uri, err := c.replaceURL(track.URI, i-ret, xtream)
+		uri, err := c.replaceURL(track.URI, i-ret)
 		if err != nil {
 			ret++
 			log.Printf("ERROR: track: %s: %s", track.Name, err)
@@ -141,42 +125,17 @@ func (c *Config) marshallInto(into *os.File, xtream bool) error {
 }
 
 // ReplaceURL replace original playlist url by proxy url
-func (c *Config) replaceURL(uri string, trackIndex int, xtream bool) (string, error) {
+func (c *Server) replaceURL(uri string, trackIndex int) (string, error) {
 	oriURL, err := url.Parse(uri)
 	if err != nil {
 		return "", err
 	}
 
-	protocol := "http"
-	if c.HTTPS {
-		protocol = "https"
-	}
-
-	customEnd := strings.Trim(c.CustomEndpoint, "/")
-	if customEnd != "" {
-		customEnd = fmt.Sprintf("/%s", customEnd)
-	}
-
 	uriPath := oriURL.EscapedPath()
-	if xtream {
-		uriPath = strings.ReplaceAll(uriPath, c.XtreamUser.PathEscape(), c.User.PathEscape())
-		uriPath = strings.ReplaceAll(uriPath, c.XtreamPassword.PathEscape(), c.Password.PathEscape())
-	} else {
-		uriPath = path.Join("/", c.endpointAntiColision, c.User.PathEscape(), c.Password.PathEscape(), fmt.Sprintf("%d", trackIndex), path.Base(uriPath))
-	}
-
-	basicAuth := oriURL.User.String()
-	if basicAuth != "" {
-		basicAuth += "@"
-	}
+	uriPath = path.Join(fmt.Sprintf("%d", trackIndex), path.Base(uriPath))
 
 	newURI := fmt.Sprintf(
-		"%s://%s%s:%d%s%s",
-		protocol,
-		basicAuth,
-		c.HostConfig.Hostname,
-		c.AdvertisedPort,
-		customEnd,
+		"/%s",
 		uriPath,
 	)
 
@@ -185,5 +144,5 @@ func (c *Config) replaceURL(uri string, trackIndex int, xtream bool) (string, er
 		return "", err
 	}
 
-	return newURL.String(), nil
+	return "[URL]" + newURL.String(), nil
 }

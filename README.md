@@ -1,6 +1,6 @@
 # Iptv Proxy
 
-[![Actions Status](https://github.com/pierre-emmanuelJ/iptv-proxy/workflows/CI/badge.svg)](https://github.com/pierre-emmanuelJ/iptv-proxy/actions?query=workflow%3ACI)
+[![Actions Status](https://github.com/segadora/iptv-proxy/workflows/CI/badge.svg)](https://github.com/segadora/iptv-proxy/actions?query=workflow%3ACI)
 
 ## Description
 
@@ -129,7 +129,7 @@ New xtream credentials
 
 ## Installation
 
-Download lasted [release](https://github.com/pierre-emmanuelJ/iptv-proxy/releases)
+Download lasted [release](https://github.com/segadora/iptv-proxy/releases)
 
 Or
 

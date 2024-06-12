@@ -19,21 +19,27 @@
 package main
 
 import (
-	"log"
-	"os"
+	"fmt"
+	"github.com/gin-gonic/gin"
+	"path"
 )
 
-func main() {
-	config := &Config{
-		M3UPlaylistUrl: os.Getenv("PLAYLIST_URL"),
-	}
+func (c *Server) routes(r *gin.RouterGroup) {
+	r = r.Group("")
 
-	server, err := NewServer(config)
-	if err != nil {
-		log.Fatal(err)
-	}
+	c.m3uRoutes(r)
+}
 
-	if e := server.Serve(); e != nil {
-		log.Fatal(e)
+func (c *Server) m3uRoutes(r *gin.RouterGroup) {
+	r.GET("/stream.m3u", c.getM3U)
+	// XXX Private need: for external Android app
+	r.POST("/stream.m3u", c.getM3U)
+
+	for i, track := range c.playlist.Tracks {
+		trackConfig := &Server{
+			track: &c.playlist.Tracks[i],
+		}
+
+		r.GET(fmt.Sprintf("/%d/%s", i, path.Base(track.URI)), trackConfig.reverseProxy)
 	}
 }
