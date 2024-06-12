@@ -27,7 +27,6 @@ import (
 	"net/http"
 	"net/url"
 	"os"
-	"path"
 	"strings"
 )
 
@@ -54,18 +53,6 @@ func (c *Server) getM3U(ctx *gin.Context) {
 
 func (c *Server) reverseProxy(ctx *gin.Context) {
 	rpURL, err := url.Parse(c.track.URI)
-	if err != nil {
-		ctx.AbortWithError(http.StatusInternalServerError, err) // nolint: errcheck
-		return
-	}
-
-	c.stream(ctx, rpURL)
-}
-
-func (c *Server) m3u8ReverseProxy(ctx *gin.Context) {
-	id := ctx.Param("id")
-
-	rpURL, err := url.Parse(strings.ReplaceAll(c.track.URI, path.Base(c.track.URI), id))
 	if err != nil {
 		ctx.AbortWithError(http.StatusInternalServerError, err) // nolint: errcheck
 		return
