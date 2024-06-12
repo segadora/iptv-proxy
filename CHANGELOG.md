@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.5](https://github.com/segadora/iptv-proxy/compare/iptv-proxy-v1.1.4...iptv-proxy-v1.1.5) (2024-06-12)
+
+
+### Bug Fixes
+
+* fix missing tags ([7d3d44f](https://github.com/segadora/iptv-proxy/commit/7d3d44fd2bfcc86988f648da49a0a6b518603fb0))
+
 ## [1.1.4](https://github.com/segadora/iptv-proxy/compare/iptv-proxy-v1.1.3...iptv-proxy-v1.1.4) (2024-06-12)
 
 
