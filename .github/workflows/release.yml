@@ -11,6 +11,7 @@ name: release-please
 
 jobs:
   release-please:
+    name: Release please
     runs-on: ubuntu-latest
     outputs:
       release: ${{ steps.release.outputs.release_created }}
@@ -19,7 +20,8 @@ jobs:
     steps:
       - uses: googleapis/release-please-action@v4
         with:
-          release-type: go
+          config-file: release-please-config.json
+          manifest-file: .release-please-manifest.json
 
   push_to_registry:
     needs: [ release-please ]
