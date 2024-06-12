@@ -1,5 +1,31 @@
 # Changelog
 
+## [1.1.0](https://github.com/segadora/iptv-proxy/compare/iptv-proxy-v1.0.0...iptv-proxy-v1.1.0) (2024-06-12)
+
+
+### Features
+
+* add releasing ([ee0f758](https://github.com/segadora/iptv-proxy/commit/ee0f7587711dc090b7f99a105967096009f53704))
+* update dependencies ([4d341ec](https://github.com/segadora/iptv-proxy/commit/4d341ec0386bb2aa3f20110cc468404a0bca2638))
+
+
+### Bug Fixes
+
+* fix docker build ([0b75504](https://github.com/segadora/iptv-proxy/commit/0b75504477f213df837bfae5dd75c26ec9839e65))
+* fix workflows ([b148acb](https://github.com/segadora/iptv-proxy/commit/b148acbdb29ab2b1c6a81e8ddd312b5c112dfca1))
+
+
+### Miscellaneous
+
+* add support for refactor commits ([5e90ca7](https://github.com/segadora/iptv-proxy/commit/5e90ca7bc5d4ace182d8f49c4a35c6483eab67d6))
+* fix typo ([c64161b](https://github.com/segadora/iptv-proxy/commit/c64161bb1d249a327d625edc8addeba13f793bc9))
+* ignore vendor folder ([e933537](https://github.com/segadora/iptv-proxy/commit/e933537d9f14c3cdf7c6f23ba6aeb52fffb23ced))
+* **master:** release 1.0.0 ([85d3101](https://github.com/segadora/iptv-proxy/commit/85d31018feef712de09e1c1dd431c0892dfc9a4a))
+* refactor releasing ([e2b8dcd](https://github.com/segadora/iptv-proxy/commit/e2b8dcdfc48451ef329b6eb9adeddea81d277f2f))
+* remove unused method ([7a3af12](https://github.com/segadora/iptv-proxy/commit/7a3af12ab6d59c55f5801c76c253ef29dec577b9))
+* remove vendor folder from git ([5796558](https://github.com/segadora/iptv-proxy/commit/579655804a50a0081c0d8f99d90f40c7eb1fcdd4))
+* simplify ([475c1cd](https://github.com/segadora/iptv-proxy/commit/475c1cd641ee7cb5fbdd06d5bb9889dcc893fa02))
+
 ## 1.0.0 (2024-06-12)
 
 
