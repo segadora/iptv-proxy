@@ -1,8 +1,4 @@
 {
-  "include-component-in-tag": true,
-  "separate-pull-requests": true,
-  "release-type": "simple",
-  "tag-separator": "-",
   "packages": {
     ".": {
       "changelog-path": "CHANGELOG.md",
