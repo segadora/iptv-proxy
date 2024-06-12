@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.2](https://github.com/segadora/iptv-proxy/compare/v1.0.1...v1.0.2) (2024-06-12)
+
+
+### Miscellaneous
+
+* update tagging ([da452f9](https://github.com/segadora/iptv-proxy/commit/da452f95f0197a49057341772491ce1d61bdfec5))
+
 ## [1.0.1](https://github.com/segadora/iptv-proxy/compare/v1.0.0...v1.0.1) (2024-06-12)
 
 
