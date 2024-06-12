@@ -11,7 +11,7 @@ RUN go get -d -v ./...
 
 RUN CGO_ENABLED=0 GOOS=linux go build -o iptv-proxy *.go
 
-FROM alpine:3 as executeable
+FROM alpine:3 as executable
 
 COPY --from=build  /app/iptv-proxy /
 
