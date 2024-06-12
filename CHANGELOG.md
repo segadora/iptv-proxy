@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.1](https://github.com/segadora/iptv-proxy/compare/iptv-proxy-v1.1.0...iptv-proxy-v1.1.1) (2024-06-12)
+
+
+### Bug Fixes
+
+* fix invalid repo path ([53ae797](https://github.com/segadora/iptv-proxy/commit/53ae79742b38f965b5ba4d7c0512dbcbf4f75435))
+
 ## [1.1.0](https://github.com/segadora/iptv-proxy/compare/iptv-proxy-v1.0.0...iptv-proxy-v1.1.0) (2024-06-12)
 
 
