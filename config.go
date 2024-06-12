@@ -18,26 +18,7 @@
 
 package main
 
-import (
-	"log"
-	"os"
-)
-
-func main() {
-	config := &Config{
-		M3UUrl: os.Getenv("M3U_URL"),
-		EPGUrl: os.Getenv("EPG_URL"),
-	}
-
-	log.Printf("M3U URL: %s", config.M3UUrl)
-	log.Printf("EPG URL: %s", config.EPGUrl)
-
-	server, err := NewServer(config)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	if e := server.Serve(); e != nil {
-		log.Fatal(e)
-	}
+type Config struct {
+	M3UUrl string
+	EPGUrl string
 }

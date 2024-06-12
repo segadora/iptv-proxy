@@ -1,11 +1,16 @@
-FROM golang:1.17-alpine
+FROM golang:1.22-alpine as build
 
-RUN apk add ca-certificates
+WORKDIR /app
 
-WORKDIR /go/src/github.com/pierre-emmanuelJ/iptv-proxy
-COPY . .
-RUN GO111MODULE=off CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o iptv-proxy .
+COPY *.go ./
+COPY go.mod go.sum ./
 
-FROM alpine:3
-COPY --from=0  /go/src/github.com/pierre-emmanuelJ/iptv-proxy/iptv-proxy /
+RUN go get -d -v ./...
+
+RUN CGO_ENABLED=0 GOOS=linux go build -o iptv-proxy *.go
+
+FROM alpine:3 as executable
+
+COPY --from=build  /app/iptv-proxy /
+
 ENTRYPOINT ["/iptv-proxy"]

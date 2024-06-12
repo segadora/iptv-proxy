@@ -19,25 +19,27 @@
 package main
 
 import (
-	"log"
-	"os"
+	"fmt"
+	"github.com/gin-gonic/gin"
+	"path"
 )
 
-func main() {
-	config := &Config{
-		M3UUrl: os.Getenv("M3U_URL"),
-		EPGUrl: os.Getenv("EPG_URL"),
-	}
+func (c *Server) routes(r *gin.RouterGroup) {
+	r = r.Group("")
 
-	log.Printf("M3U URL: %s", config.M3UUrl)
-	log.Printf("EPG URL: %s", config.EPGUrl)
+	c.m3uRoutes(r)
+}
 
-	server, err := NewServer(config)
-	if err != nil {
-		log.Fatal(err)
-	}
+func (c *Server) m3uRoutes(r *gin.RouterGroup) {
+	r.GET("/playlist.m3u", c.getM3U)
+	r.POST("/playlist.m3u", c.getM3U)
+	r.GET("/epg", c.getEPG)
 
-	if e := server.Serve(); e != nil {
-		log.Fatal(e)
+	for i, track := range c.playlist.Tracks {
+		trackConfig := &Server{
+			track: &c.playlist.Tracks[i],
+		}
+
+		r.GET(fmt.Sprintf("/%d/%s", i, path.Base(track.URI)), trackConfig.reverseProxy)
 	}
 }
