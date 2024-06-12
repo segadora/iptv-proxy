@@ -7,8 +7,6 @@ permissions:
   contents: write
   pull-requests: write
 
-name: release-please
-
 jobs:
   release-please:
     name: Release please
@@ -25,7 +23,6 @@ jobs:
 
   push_to_registry:
     needs: [ release-please ]
-    if: ${{ needs.release-please.outputs.release }}
     name: Push Docker image to Docker Hub
     runs-on: ubuntu-latest
     permissions:
@@ -33,6 +30,7 @@ jobs:
       contents: read
       attestations: write
       id-token: write
+    if: ${{ needs.release-please.outputs.release }}
     steps:
       - name: Check out the repo
         uses: actions/checkout@v4
@@ -47,7 +45,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7
         with:
-          images: my-docker-hub-namespace/my-docker-hub-repository
+          images: segadora/iptv-proxy
 
       - name: Build and push Docker image
         id: push
@@ -58,7 +56,6 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-
 
       - name: Generate artifact attestation
         uses: actions/attest-build-provenance@v1
