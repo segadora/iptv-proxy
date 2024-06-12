@@ -6,7 +6,6 @@
   "packages": {
     ".": {
       "component": "iptv-proxy",
-      "include-component-in-tag": true,
       "changelog-path": "CHANGELOG.md",
       "bump-minor-pre-major": false,
       "bump-patch-for-minor-pre-major": false,
