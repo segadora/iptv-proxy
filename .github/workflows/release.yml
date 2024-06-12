@@ -52,10 +52,8 @@ jobs:
           tags: |
             type=ref,event=branch
             type=ref,event=pr
-            type=ref,event=tag
             type=semver,pattern={{version}}
             type=semver,pattern={{major}}.{{minor}}
-            type=sha
 
       - name: Build and push Docker image
         id: push
@@ -64,5 +62,5 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: ${{ steps.meta.outputs.tags }}
+          tags: ${{ env.IMAGE_NAME }}:latest , ${{ env.IMAGE_NAME }}:${{ needs.release-please.outputs.tag }}
           labels: ${{ steps.meta.outputs.labels }}
