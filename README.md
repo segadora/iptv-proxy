@@ -28,3 +28,32 @@ What M3U proxy IPTV do
 
 ## Docker compose example with nordvpn
 
+Uses docker container from [edgd1er/nordvpn-proxy](https://github.com/edgd1er/nordvpn-proxy).
+
+The following urls will be available for you.
+
+M3U: `http://127.0.0.1:1323/playlist.m3u`
+
+EPG: `http://127.0.0.1:1323/epg`
+
+```yaml
+services:
+  proxy:
+    image: edgd1er/nordvpn-proxy:latest
+    restart: unless-stopped
+    container_name: proxy
+    # additional config will be needed, see 
+    ports:
+      # iptv proxy
+      - 1323:1323
+  iptv-proxy:
+    image: ghcr.io/segadora/iptv-proxy:latest
+    container_name: "iptv-proxy"
+    network_mode: service:proxy # route traffic though vpn container
+    depends_on:
+      - proxy
+    restart: on-failure
+    environment:
+      M3U_URL: https://xeev.net/get/m3u/xxxxxxxxxxxxxxxxxxxxx
+      EPG_URL: https://xeev.net/get/epg/xxxxxxxxxxxxxxxxxxxxx
+```
