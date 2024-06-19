@@ -18,4 +18,5 @@ vendor
 iptv-proxy
 iptv/iptv.m3u
 
+.env
 

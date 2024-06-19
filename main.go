@@ -19,11 +19,16 @@
 package main
 
 import (
+	"github.com/joho/godotenv"
 	"log"
 	"os"
 )
 
 func main() {
+	if err := godotenv.Load(); err != nil {
+		log.Printf("unable to load .env file: %s", err)
+	}
+
 	config := &Config{
 		M3UUrl: os.Getenv("M3U_URL"),
 		EPGUrl: os.Getenv("EPG_URL"),
