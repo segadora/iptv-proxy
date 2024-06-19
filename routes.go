@@ -33,6 +33,8 @@ func (c *Server) routes(r *gin.RouterGroup) {
 func (c *Server) m3uRoutes(r *gin.RouterGroup) {
 	r.GET("/playlist.m3u", c.getM3U)
 	r.POST("/playlist.m3u", c.getM3U)
+	r.GET("/m3u", c.getM3U)
+	r.POST("/m3u", c.getM3U)
 	r.GET("/epg", c.getEPG)
 
 	for i, track := range c.playlist.Tracks {

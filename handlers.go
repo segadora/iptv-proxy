@@ -27,11 +27,10 @@ import (
 	"net/http"
 	"net/url"
 	"os"
-	"strings"
 )
 
 func (c *Server) getM3U(ctx *gin.Context) {
-	ctx.Header("Content-Disposition", fmt.Sprintf(`attachment; filename=%q`, strings.TrimLeft(ctx.Request.URL.Path, "/")))
+	ctx.Header("Content-Disposition", "attachment; filename=playlist.m3u")
 	ctx.Header("Content-Type", "application/octet-stream")
 
 	b, err := os.ReadFile(c.proxyPlaylistFile.Name()) // just pass the file name
