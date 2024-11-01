@@ -4,7 +4,7 @@
 
 ## Description
 
-Iptv-Proxy is a project to proxyfie an m3u file
+Iptv-Proxy is acting as a reverse proxy and serving the stream though go to allow use of a proxy in docker compose.
 
 ### M3u Example
 
@@ -24,7 +24,7 @@ http://iptvexample.net:1234/15/test/4
 
 What M3U proxy IPTV do
  - convert chanels url to new endpoints
- - convert original m3u file with new routes pointing to the proxy
+ - convert original m3u file with new routes pointing to internal routes
 
 ## Docker compose example with nordvpn
 
@@ -32,9 +32,11 @@ Uses docker container from [edgd1er/nordvpn-proxy](https://github.com/edgd1er/no
 
 The following urls will be available for you.
 
-M3U: `http://127.0.0.1:1323/playlist.m3u`
+M3U: `http://127.0.0.1:1323/get/m3u`
 
-EPG: `http://127.0.0.1:1323/epg`
+EPG: `http://127.0.0.1:1323/get/epg`
+
+Health endpoint: `http://127.0.0.1:1323/health`
 
 ```yaml
 services:
@@ -42,18 +44,44 @@ services:
     image: edgd1er/nordvpn-proxy:latest
     restart: unless-stopped
     container_name: proxy
-    # additional config will be needed, see 
     ports:
-      # iptv proxy
-      - 1323:1323
+      - "1081:1080"
+      - "8888:8888/tcp"
+    sysctls:
+      - net.ipv4.conf.all.rp_filter=2
+    cap_add:
+      - NET_ADMIN
+    environment:
+      - TZ=Europe/London
+      - DNS=1.1.1.1@853#cloudflare-dns.com 1.0.0.1@853#cloudflare-dns.com
+      - NORDVPN_COUNTRY=Germany
+      - NORDVPN_PROTOCOL=udp
+      - NORDVPN_CATEGORY=p2p
+      - EXIT_WHEN_IP_NOTASEXPECTED=1
+      - WRITE_OVPN_STATUS=0
+      - LOCAL_NETWORK=192.168.1.0/24
+      - TINYPORT=8888
+      - TINY_LOGLEVEL=Error
+      - DANTE_LOGLEVEL="error connect"
+      - DANTE_ERRORLOG=/dev/stdout
+      - CRON_LOGLEVEL=9
+      - DEBUG=0
+    secrets:
+      - NORDVPN_CREDS
+    volumes:
+      - ./nordvpn/config/:/config/
+
   iptv-proxy:
     image: ghcr.io/segadora/iptv-proxy:latest
     container_name: "iptv-proxy"
-    network_mode: service:proxy # route traffic though vpn container
-    depends_on:
-      - proxy
     restart: on-failure
     environment:
-      M3U_URL: https://xeev.net/get/m3u/xxxxxxxxxxxxxxxxxxxxx
-      EPG_URL: https://xeev.net/get/epg/xxxxxxxxxxxxxxxxxxxxx
+      HTTP_PROXY: "http://proxy:8888"
+      HTTPS_PROXY: "http://proxy:8888"
+      NO_PROXY: "127.0.0.0/8"
+      IPTV_PLAYLIST: https://xeev.net/get/m3u/xxxxxxxxxxxxxxxxxxxxx
+      IPTV_EPG: https://xeev.net/get/epg/xxxxxxxxxxxxxxxxxxxxx
+    depends_on:
+      proxy:
+        condition: service_healthy
 ```
