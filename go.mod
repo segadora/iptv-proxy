@@ -1,6 +1,6 @@
 module github.com/segadora/iptv-proxy
 
-go 1.22.3
+go 1.23.1
 
 require (
 	github.com/gin-contrib/cors v1.7.2
@@ -8,12 +8,12 @@ require (
 	github.com/gin-gonic/gin v1.10.0
 	github.com/jamesnetherton/m3u v0.4.0
 	github.com/joho/godotenv v1.5.1
-	github.com/rs/zerolog v1.32.0
+	github.com/rs/zerolog v1.33.0
 )
 
 require (
 	github.com/bytedance/sonic v1.12.3 // indirect
-	github.com/bytedance/sonic/loader v0.2.0 // indirect
+	github.com/bytedance/sonic/loader v0.2.1 // indirect
 	github.com/cloudwego/base64x v0.1.4 // indirect
 	github.com/cloudwego/iasm v0.2.0 // indirect
 	github.com/gabriel-vasile/mimetype v1.4.6 // indirect

@@ -1,20 +1,27 @@
-FROM golang:1.23-alpine AS build
+FROM --platform=${BUILDPLATFORM:-linux/amd64} golang:1.23 as builder
 
-WORKDIR /app
+ARG TARGETPLATFORM
+ARG BUILDPLATFORM
+ARG TARGETOS
+ARG TARGETARCH
 
-COPY *.go ./
-COPY go.mod go.sum ./
+ENV CGO_ENABLED=0
+ENV GO111MODULE=on
 
-RUN go get -d -v ./...
+WORKDIR /go/src/github.com/segadora/iptv-proxy
 
-RUN CGO_ENABLED=0 GOOS=linux go build -o iptv-proxy *.go
+COPY go.mod go.mod
+COPY go.sum go.sum
+RUN go mod download
 
-FROM alpine:3 AS executable
+COPY . .
 
-COPY --from=build  /app/iptv-proxy /
+RUN CGO_ENABLED=${CGO_ENABLED} GOOS=${TARGETOS} GOARCH=${TARGETARCH} -o /usr/bin/iptv-proxy .
 
-RUN apk add curl
+FROM --platform=${BUILDPLATFORM:-linux/amd64} gcr.io/distroless/static:nonroot
 
-HEALTHCHECK --interval=5s --timeout=5s --start-period=10s --retries=3 CMD curl --fail http://localhost:1323/health || exit 1
+WORKDIR /
+COPY --from=builder /usr/bin/iptv-proxy /
+USER nonroot:nonroot
 
-ENTRYPOINT ["/iptv-proxy"]
+CMD ["/iptv-proxy"]
