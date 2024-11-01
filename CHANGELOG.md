@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.0.2](https://github.com/segadora/iptv-proxy/compare/v2.0.1...v2.0.2) (2024-11-01)
+
+
+### Bug Fixes
+
+* possible fix of 403 forbidden ([32e28c8](https://github.com/segadora/iptv-proxy/commit/32e28c80a6dff4013d7cadb5aaf39781dfc227f7))
+
 ## [2.0.1](https://github.com/segadora/iptv-proxy/compare/v2.0.0...v2.0.1) (2024-11-01)
 
 
