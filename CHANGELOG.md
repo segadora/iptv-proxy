@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.0.1](https://github.com/segadora/iptv-proxy/compare/v2.0.0...v2.0.1) (2024-11-01)
+
+
+### Miscellaneous
+
+* add latest tag ([184c51f](https://github.com/segadora/iptv-proxy/commit/184c51f7cfcfd57a975e9a915e39a43d8ef6bab6))
+* optimize build file ([8284bb8](https://github.com/segadora/iptv-proxy/commit/8284bb8026e4e2aeb2e46b45d2760ff49a0d4786))
+
 ## [2.0.0](https://github.com/segadora/iptv-proxy/compare/v1.1.0...v2.0.0) (2024-11-01)
 
 
