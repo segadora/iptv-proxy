@@ -1,5 +1,19 @@
 # Changelog
 
+## [2.0.0](https://github.com/segadora/iptv-proxy/compare/v1.1.0...v2.0.0) (2024-11-01)
+
+
+### ⚠ BREAKING CHANGES
+
+* simplify setup and add multi arch build
+
+### Miscellaneous
+
+* add note ([4b71992](https://github.com/segadora/iptv-proxy/commit/4b71992a4f3cbbed8fb3d7aaa450ba9b64fdacc7))
+* rerun workflow ([ab8a144](https://github.com/segadora/iptv-proxy/commit/ab8a144e342a254311849f0499dea5ec784f664e))
+* simplify setup and add multi arch build ([82e5d57](https://github.com/segadora/iptv-proxy/commit/82e5d5761be0766ff0fbf0eea4ebcacf6a2c79a5))
+* update readme to use gluetun ([56f983f](https://github.com/segadora/iptv-proxy/commit/56f983fa37c6065ac0fbf3d4dc899a148b957d78))
+
 ## [1.1.0](https://github.com/segadora/iptv-proxy/compare/v1.0.0...v1.1.0) (2024-06-19)
 
 
