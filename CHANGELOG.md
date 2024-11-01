@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.0.3](https://github.com/segadora/iptv-proxy/compare/v2.0.2...v2.0.3) (2024-11-01)
+
+
+### Miscellaneous
+
+* matrix pipeline building (test) ([347d926](https://github.com/segadora/iptv-proxy/commit/347d92674a1650931381d0f0084eb0248068c60f))
+
 ## [2.0.2](https://github.com/segadora/iptv-proxy/compare/v2.0.1...v2.0.2) (2024-11-01)
 
 
