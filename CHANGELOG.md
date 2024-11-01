@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.0.7](https://github.com/segadora/iptv-proxy/compare/v2.0.6...v2.0.7) (2024-11-01)
+
+
+### Bug Fixes
+
+* fix merge fails ([7021070](https://github.com/segadora/iptv-proxy/commit/70210706e21935b62399653bfd967fda53fef13d))
+
 ## [2.0.6](https://github.com/segadora/iptv-proxy/compare/v2.0.5...v2.0.6) (2024-11-01)
 
 
