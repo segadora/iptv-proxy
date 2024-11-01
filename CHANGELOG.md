@@ -1,5 +1,16 @@
 # Changelog
 
+## [2.0.0](https://github.com/segadora/iptv-proxy/compare/v1.1.0...v2.0.0) (2024-11-01)
+
+
+### ⚠ BREAKING CHANGES
+
+* simplify setup and add multi arch build
+
+### Miscellaneous
+
+* simplify setup and add multi arch build ([27fda55](https://github.com/segadora/iptv-proxy/commit/27fda5555eb3323561607525663a31b1231c2838))
+
 ## [2.0.8](https://github.com/segadora/iptv-proxy/compare/v2.0.7...v2.0.8) (2024-11-01)
 
 
