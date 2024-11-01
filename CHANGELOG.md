@@ -1,5 +1,18 @@
 # Changelog
 
+## [2.0.5](https://github.com/segadora/iptv-proxy/compare/v2.0.4...v2.0.5) (2024-11-01)
+
+
+### Bug Fixes
+
+* fix job failing ([e8b32ce](https://github.com/segadora/iptv-proxy/commit/e8b32ce46f69599f5d90ae8b525b23e6de8a7b73))
+
+
+### Miscellaneous
+
+* change actions ([c4d68c5](https://github.com/segadora/iptv-proxy/commit/c4d68c515efdc5eb769d5041b637f45602eb95b9))
+* remove unnessesary permission ([560f296](https://github.com/segadora/iptv-proxy/commit/560f296413f0d11ed99cf6ddef5f6c992847154a))
+
 ## [2.0.4](https://github.com/segadora/iptv-proxy/compare/v2.0.3...v2.0.4) (2024-11-01)
 
 
