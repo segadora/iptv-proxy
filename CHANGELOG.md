@@ -1,5 +1,17 @@
 # Changelog
 
+## [2.0.4](https://github.com/segadora/iptv-proxy/compare/v2.0.3...v2.0.4) (2024-11-01)
+
+
+### Bug Fixes
+
+* fix image should be pushed to ghcr.io ([c6511eb](https://github.com/segadora/iptv-proxy/commit/c6511ebd3a420c569c6155f72ef7a319aca7ce3a))
+
+
+### Miscellaneous
+
+* fix 'as' should be uppercase ([ca49a84](https://github.com/segadora/iptv-proxy/commit/ca49a840123f3276dbba06800f261d95d55d051f))
+
 ## [2.0.3](https://github.com/segadora/iptv-proxy/compare/v2.0.2...v2.0.3) (2024-11-01)
 
 
