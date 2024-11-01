@@ -4,7 +4,7 @@
 
 ## Description
 
-Iptv-Proxy is a project to proxyfie an m3u file
+Iptv-Proxy is acting as a reverse proxy and serving the stream though go to allow use of a proxy in docker compose.
 
 ### M3u Example
 
@@ -23,8 +23,8 @@ http://iptvexample.net:1234/15/test/4
 ```
 
 What M3U proxy IPTV do
- - convert chanels url to new endpoints
- - convert original m3u file with new routes pointing to the proxy
+- convert chanels url to new endpoints
+- convert original m3u file with new routes pointing to internal routes
 
 ## Docker compose example with nordvpn
 
@@ -32,28 +32,33 @@ Uses docker container from [edgd1er/nordvpn-proxy](https://github.com/edgd1er/no
 
 The following urls will be available for you.
 
-M3U: `http://127.0.0.1:1323/playlist.m3u`
+M3U: `http://127.0.0.1:1323/get/m3u`
 
-EPG: `http://127.0.0.1:1323/epg`
+EPG: `http://127.0.0.1:1323/get/epg`
+
+Health endpoint: `http://127.0.0.1:1323/health`
 
 ```yaml
 services:
-  proxy:
-    image: edgd1er/nordvpn-proxy:latest
-    restart: unless-stopped
-    container_name: proxy
-    # additional config will be needed, see 
-    ports:
-      # iptv proxy
-      - 1323:1323
+  # see gluetun https://github.com/qdm12/gluetun
+  gluetun:
+    container_name: gluetun
+    image: qmcgaw/gluetun
+    # add rest
+
   iptv-proxy:
     image: ghcr.io/segadora/iptv-proxy:latest
     container_name: "iptv-proxy"
-    network_mode: service:proxy # route traffic though vpn container
-    depends_on:
-      - proxy
+    network_mode: service:gluetun # https://github.com/qdm12/gluetun-wiki/blob/main/setup/connect-a-container-to-gluetun.md
     restart: on-failure
     environment:
-      M3U_URL: https://xeev.net/get/m3u/xxxxxxxxxxxxxxxxxxxxx
-      EPG_URL: https://xeev.net/get/epg/xxxxxxxxxxxxxxxxxxxxx
+      IPTV_PLAYLIST: https://xeev.net/get/m3u/xxxxxxxxxxxxxxxxxxxxx
+      IPTV_EPG: https://xeev.net/get/epg/xxxxxxxxxxxxxxxxxxxxx
+    depends_on:
+      gluetun:
+        condition: service_healthy
 ```
+
+## Notes
+
+- Does not work with HLS
