@@ -1,8 +1,5 @@
 name: Release please
 
-permissions:
-  packages: write
-
 on:
   push:
     branches:
