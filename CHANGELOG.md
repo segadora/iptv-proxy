@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.0.8](https://github.com/segadora/iptv-proxy/compare/v2.0.7...v2.0.8) (2024-11-01)
+
+
+### Miscellaneous
+
+* move permissions ([c14d49d](https://github.com/segadora/iptv-proxy/commit/c14d49db14a9a09b9ae55b312a38af668c711a6c))
+
 ## [2.0.7](https://github.com/segadora/iptv-proxy/compare/v2.0.6...v2.0.7) (2024-11-01)
 
 
