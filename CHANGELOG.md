@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.0.2](https://github.com/segadora/iptv-proxy/compare/v2.0.1...v2.0.2) (2024-11-01)
+
+
+### Miscellaneous
+
+* optimize build file ([b312007](https://github.com/segadora/iptv-proxy/commit/b312007ec741b16ea2e3d2fe5d8602dd1b01f3b9))
+
 ## [2.0.1](https://github.com/segadora/iptv-proxy/compare/v2.0.0...v2.0.1) (2024-11-01)
 
 
