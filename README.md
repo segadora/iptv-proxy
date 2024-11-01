@@ -58,3 +58,7 @@ services:
       gluetun:
         condition: service_healthy
 ```
+
+## Notes
+
+- Does not work with HLS
