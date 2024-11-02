@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.0.2](https://github.com/segadora/iptv-proxy/compare/v2.0.1...v2.0.2) (2024-11-02)
+
+
+### Miscellaneous
+
+* cleanup release pipeline ([d7065a1](https://github.com/segadora/iptv-proxy/commit/d7065a10da62aa8a7427ed7e9fc1f07e99ba203c))
+
 ## [2.0.1](https://github.com/segadora/iptv-proxy/compare/v2.0.0...v2.0.1) (2024-11-01)
 
 
