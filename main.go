@@ -4,22 +4,24 @@ import (
 	"bytes"
 	"fmt"
 	"github.com/gin-contrib/cors"
-	"github.com/gin-contrib/logger"
 	"github.com/gin-gonic/gin"
 	"github.com/jamesnetherton/m3u"
 	"github.com/joho/godotenv"
-	"github.com/rs/zerolog"
 	"io"
 	"log"
 	"net/http"
 	"net/url"
 	"os"
+	"strings"
+	"time"
 )
 
 type Config struct {
 	Playlist  string
 	EPG       string
 	ServerUrl string
+	BypassVpn bool
+	Debug     bool
 }
 
 func main() {
@@ -31,6 +33,8 @@ func main() {
 		Playlist:  os.Getenv("IPTV_PLAYLIST"),
 		EPG:       os.Getenv("IPTV_EPG"),
 		ServerUrl: os.Getenv("IPTV_SERVER_URL"),
+		BypassVpn: os.Getenv("IPTV_BYPASS_VPN") == "1",
+		Debug:     os.Getenv("IPTV_DEBUG") == "1",
 	}
 
 	log.Printf("playlist url: %s", config.Playlist)
@@ -40,10 +44,29 @@ func main() {
 		log.Printf("warning: host is dynamically defined on request")
 	}
 
+	gin.SetMode(gin.ReleaseMode)
 	r := gin.New()
 	r.Use(
 		cors.Default(),
-		gin.LoggerWithConfig(gin.LoggerConfig{SkipPaths: []string{"/health"}}),
+		gin.LoggerWithConfig(gin.LoggerConfig{
+			Formatter: func(param gin.LogFormatterParams) string {
+				query, _ := url.Parse(param.Path)
+
+				return fmt.Sprintf("%s - [%s] \"%s %s (%s) %s %d %s \"%s\" %s\"\n",
+					param.ClientIP,
+					param.TimeStamp.Format(time.RFC1123),
+					param.Method,
+					strings.Split(param.Path, "?")[0],
+					query.Query().Get("channelName"),
+					param.Request.Proto,
+					param.StatusCode,
+					param.Latency,
+					param.Request.UserAgent(),
+					param.ErrorMessage,
+				)
+			},
+			SkipPaths: []string{"/health"},
+		}),
 		gin.Recovery(),
 	)
 	r.GET("/health", healthHandler)
@@ -51,20 +74,7 @@ func main() {
 	r.GET("/get/m3u", config.playlistHandler)
 	r.POST("/get/epg", config.epgHandler)
 	r.POST("/get/m3u", config.playlistHandler)
-	r.GET("/stream", logger.SetLogger(
-		logger.WithLogger(func(c *gin.Context, l zerolog.Logger) zerolog.Logger {
-			var streamRequest StreamRequest
-			if c.ShouldBind(&streamRequest) != nil {
-				return l.With().
-					Str("channel", "unknown").
-					Logger()
-			}
-
-			return l.With().
-				Str("channel", streamRequest.ChannelName).
-				Logger()
-		}),
-	), streamHandler)
+	r.GET("/stream", config.streamHandler)
 
 	if err := r.Run(":1323"); err != nil {
 		log.Fatalf("unable to start server: %s", err)
@@ -80,13 +90,20 @@ type StreamRequest struct {
 	ChannelName string `form:"channelName"`
 }
 
-func streamHandler(c *gin.Context) {
+func (config *Config) streamHandler(c *gin.Context) {
 	var streamRequest StreamRequest
 	if err := c.ShouldBind(&streamRequest); err != nil {
 		log.Printf("bad request: %s", err)
 
 		c.String(http.StatusBadRequest, "bad request")
 
+		return
+	}
+
+	if config.BypassVpn {
+		log.Println("warn: proxy is not using")
+
+		c.Redirect(http.StatusTemporaryRedirect, streamRequest.RemoteUrl)
 		return
 	}
 
@@ -110,6 +127,10 @@ func streamHandler(c *gin.Context) {
 		_ = c.AbortWithError(http.StatusInternalServerError, err)
 
 		return
+	}
+
+	if config.Debug {
+		log.Printf("response status code: %d", resp.StatusCode)
 	}
 
 	defer func(Body io.ReadCloser) {
